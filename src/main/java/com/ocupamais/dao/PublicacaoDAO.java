@@ -14,28 +14,43 @@ public class PublicacaoDAO {
 
     // inserir publicação
     public void inserir(Publicacao publicacao) {
-        String sql = "INSERT INTO Publicacoes (id_usuario, id_espaco, descricao, status) VALUES (?, ?, ?, ?)";
+        String sql = "INSERT INTO Publicacoes (id_usuario, id_espaco, descricao, status, imagem) VALUES (?, ?, ?, ?, ?)";
         try (Connection conn = Conexao.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+            PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+
+            conn.setAutoCommit(false);
 
             stmt.setInt(1, publicacao.getUsuario().getId());
             stmt.setInt(2, publicacao.getEspaco().getId());
             stmt.setString(3, publicacao.getDescricao());
 
-            // se o status estiver null define "PENDENTE"
-            String status = publicacao.getStatus() != null ? publicacao.getStatus() : "PENDENTE";
+            String status = (publicacao.getStatus() != null && !publicacao.getStatus().isBlank())
+                    ? publicacao.getStatus().toUpperCase()
+                    : "PENDENTE";
+
+            if (status.equals("ANALISE")) {
+                status = "EM_ANALISE";
+            }
+            
             stmt.setString(4, status);
-            publicacao.setStatus(status); // objeto Java também tenha PENDENTE
+            publicacao.setStatus(status);
+
+            stmt.setString(5, publicacao.getImagem());
 
             stmt.executeUpdate();
 
-            ResultSet rs = stmt.getGeneratedKeys();
-            if (rs.next()) {
-                publicacao.setId(rs.getInt(1));
+            try (ResultSet rs = stmt.getGeneratedKeys()) {
+                if (rs.next()) {
+                    publicacao.setId(rs.getInt(1));
+                }
             }
+
+            conn.commit();
+            System.out.println("✅ Publicação salva no banco: ID " + publicacao.getId() + " | Status: " + publicacao.getStatus());
 
         } catch (SQLException e) {
             e.printStackTrace();
+            System.err.println("❌ Erro ao inserir publicação: " + e.getMessage());
         }
     }
 
@@ -43,7 +58,7 @@ public class PublicacaoDAO {
     public List<Publicacao> listar() {
         List<Publicacao> publicacoes = new ArrayList<>();
         String sql = "SELECT p.*, u.id AS u_id, u.nome AS u_nome, u.email AS u_email, u.senha AS u_senha, u.tipo AS u_tipo, u.bairro AS u_bairro," +
-                     " e.id AS e_id, e.nome AS e_nome, e.localizacao AS e_localizacao " +
+                     " e.id AS e_id, e.nome AS e_nome " +
                      "FROM Publicacoes p " +
                      "JOIN Usuarios u ON p.id_usuario = u.id " +
                      "JOIN EspacosPublicos e ON p.id_espaco = e.id";
@@ -63,8 +78,7 @@ public class PublicacaoDAO {
 
                 EspacoPublico espaco = new EspacoPublico(
                         rs.getInt("e_id"),
-                        rs.getString("e_nome"),
-                        rs.getString("e_localizacao")
+                        rs.getString("e_nome")
                 );
 
                 Publicacao p = new Publicacao(
@@ -75,7 +89,8 @@ public class PublicacaoDAO {
                         rs.getTimestamp("data_criacao"),
                         rs.getString("status")
                 );
-
+                p.setImagem(rs.getString("imagem"));
+                
                 publicacoes.add(p);
             }
 
@@ -88,7 +103,7 @@ public class PublicacaoDAO {
     // buscar por id
     public Publicacao buscarPorId(int id) {
         String sql = "SELECT p.*, u.id AS u_id, u.nome AS u_nome, u.email AS u_email, u.senha AS u_senha, u.tipo AS u_tipo, u.bairro AS u_bairro," +
-                     " e.id AS e_id, e.nome AS e_nome, e.localizacao AS e_localizacao " +
+                     " e.id AS e_id, e.nome AS e_nome " +
                      "FROM Publicacoes p " +
                      "JOIN Usuarios u ON p.id_usuario = u.id " +
                      "JOIN EspacosPublicos e ON p.id_espaco = e.id " +
@@ -110,18 +125,19 @@ public class PublicacaoDAO {
 
                 EspacoPublico espaco = new EspacoPublico(
                         rs.getInt("e_id"),
-                        rs.getString("e_nome"),
-                        rs.getString("e_localizacao")
+                        rs.getString("e_nome")
                 );
 
-                return new Publicacao(
-                        rs.getInt("id"),
-                        usuario,
-                        espaco,
-                        rs.getString("descricao"),
-                        rs.getTimestamp("data_criacao"),
-                        rs.getString("status")
+                Publicacao p = new Publicacao(
+                    rs.getInt("id"),
+                    usuario,
+                    espaco,
+                    rs.getString("descricao"),
+                    rs.getTimestamp("data_criacao"),
+                    rs.getString("status")
                 );
+                p.setImagem(rs.getString("imagem"));
+                return p;
             }
 
         } catch (SQLException e) {

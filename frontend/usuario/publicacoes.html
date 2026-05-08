@@ -4,205 +4,19 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>OcupaMais - Publicações</title>
+  <link rel="icon" type="image/png" href="/frontend/assets/logo-arvore.png">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
   <link rel="stylesheet" href="../css/style.css">
-  <style>
-    /* ======== Estilos Globais ======== */
-    body {
-      font-family: 'Segoe UI', sans-serif;
-      margin: 0;
-      background: linear-gradient(180deg, #eaf3ec 0%, #ffffff 100%);
-      color: #333;
-      display: flex;
-      flex-direction: column;
-      min-height: 100vh;
-    }
-
-    /* ======== Cabeçalho ======== */
-    header {
-      background-color: #2e7d32;
-      color: white;
-      padding: 15px 40px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-    }
-
-    header h1 {
-      margin: 0;
-      font-size: 1.8em;
-      font-weight: 600;
-    }
-
-    nav a {
-      color: white;
-      margin-left: 20px;
-      text-decoration: none;
-      font-weight: 500;
-      transition: opacity 0.2s;
-    }
-
-    nav a:hover {
-      opacity: 0.8;
-    }
-
-    nav a.active {
-      border-bottom: 2px solid #c8e6c9;
-      padding-bottom: 3px;
-    }
-
-    /* ======== Estrutura Principal ======== */
-    main.feed-container {
-      display: flex;
-      justify-content: center;
-      align-items: flex-start;
-      gap: 40px;
-      padding: 40px 5%;
-      flex: 1;
-    }
-
-    /* ======== Área de Feed ======== */
-    .feed {
-      flex: 2;
-      max-width: 700px;
-      width: 100%;
-    }
-
-    .new-post {
-      background: #ffffff;
-      padding: 20px;
-      border-radius: 12px;
-      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.07);
-      margin-bottom: 25px;
-    }
-
-    .new-post textarea {
-      width: 100%;
-      border: 1px solid #cfd8dc;
-      border-radius: 10px;
-      padding: 12px;
-      font-size: 1em;
-      resize: none;
-      height: 100px;
-      outline: none;
-      transition: 0.3s;
-      background-color: #f9faf9;
-    }
-
-    .new-post textarea:focus {
-      border-color: #2e7d32;
-      box-shadow: 0 0 0 3px rgba(46, 125, 50, 0.2);
-      background-color: #fff;
-    }
-
-    .actions {
-      text-align: right;
-      margin-top: 10px;
-    }
-
-    .actions button {
-      background-color: #2e7d32;
-      color: white;
-      border: none;
-      border-radius: 8px;
-      padding: 10px 18px;
-      font-size: 0.95em;
-      cursor: pointer;
-      transition: background-color 0.3s ease;
-    }
-
-    .actions button:hover {
-      background-color: #256429;
-    }
-
-    /* ======== Publicações ======== */
-    .post-list {
-      display: flex;
-      flex-direction: column;
-      gap: 20px;
-    }
-
-    .post {
-      background: #fff;
-      border-radius: 12px;
-      padding: 20px;
-      box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
-      border-left: 5px solid #2e7d32;
-      transition: transform 0.2s;
-    }
-
-    .post:hover {
-      transform: translateY(-2px);
-    }
-
-    .post h4 {
-      margin: 0 0 10px;
-      color: #256429;
-      font-size: 1.1em;
-    }
-
-    .post p {
-      margin: 0;
-      color: #444;
-      line-height: 1.5;
-    }
-
-    /* ======== Sidebar ======== */
-    .sidebar {
-      background: #f7fbf8;
-      padding: 20px 25px;
-      border-radius: 15px;
-      box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
-      width: 250px;
-    }
-
-    .sidebar h3 {
-      color: #256429;
-      margin-bottom: 15px;
-    }
-
-    .sidebar ul {
-      list-style: none;
-      padding: 0;
-      margin: 0;
-    }
-
-    .sidebar li {
-      margin-bottom: 8px;
-      background: #e8f5e9;
-      padding: 8px 12px;
-      border-radius: 8px;
-      color: #2e7d32;
-      font-weight: 500;
-      cursor: pointer;
-      transition: background 0.3s;
-    }
-
-    .sidebar li:hover {
-      background: #c8e6c9;
-    }
-
-    /* ======== Responsividade ======== */
-    @media (max-width: 900px) {
-      main.feed-container {
-        flex-direction: column;
-        align-items: center;
-      }
-
-      .sidebar {
-        width: 100%;
-        max-width: 700px;
-      }
-    }
-  </style>
+  <link rel="stylesheet" href="../css/publicacoes.css">
 </head>
+
 <body>
   <header>
-    <h1>OcupaMais</h1>
+    <h1>🌳 OcupaMais</h1>
     <nav>
-      <a href="../index.html">Início</a>
-      <a href="cadastro.html">Cadastro</a>
-      <a href="publicacoes.html" class="active">Publicações</a>
+      <a href="../index.html">🏠 Início</a>
+      <a href="cadastro.html">📝 Cadastro</a>
+      <a href="perfil.html" class="active">👤 Perfil</a>
     </nav>
   </header>
 
@@ -210,9 +24,17 @@
     <section class="feed">
       <div class="new-post">
         <textarea id="postText" placeholder="Compartilhe algo sobre o espaço público..."></textarea>
-        <div class="actions">
-          <button id="btnPostar">Publicar</button>
+        <div class="inline-fields">
+          <input type="text" id="postLocal" placeholder="Local (ex.: Maringá)" />
+          <select id="postStatus" aria-label="Status da publicação">
+            <option value="pendente">Pendente</option>
+            <option value="analise">Em análise</option>
+            <option value="resolvido">Resolvido</option>
+          </select>
+          <input type="file" id="postImage" accept="image/*" />
+          <button id="btnPostar" type="button" class="btn btn-success">Publicar</button>
         </div>
+        <img id="postPreview" class="post-preview" alt="Pré-visualização da imagem" />
       </div>
 
       <div id="postList" class="post-list">
@@ -231,6 +53,92 @@
     </aside>
   </main>
 
-  <script src="js/publicacoes.js"></script>
+  <script>
+    // Carregar posts simulados estaticamente no container
+    (function renderFakeFeed() {
+      const list = document.getElementById("postList");
+      if (!list) return;
+      list.innerHTML = `
+        <article class="post">
+          <div class="post-header">
+            <div class="avatar">CR</div>
+            <div class="post-meta">
+              <span class="author">Camila Reinke</span>
+              <span class="info">Maringá(Centro) • há 2 horas</span>
+            </div>
+            <span class="status-badge status-pendente" title="Status">Pendente</span>
+          </div>
+          <img class="post-image" src="https://s2-g1.glbimg.com/zXMSe2WU0kughoVcF9fquxqwZY0=/0x0:1200x800/984x0/smart/filters:strip_icc()/i.s3.glbimg.com/v1/AUTH_59edd422c0c84a879bd37670ae4f538a/internal_photos/bs/2025/3/P/7zOxyWT9AiqkcTzFBiyA/httpsportalnorte.com.brwp-adminpost.phppost-292629-action-edit-2025-10-13t155914.133.jpg" alt="Buraco em Maringá">
+          <div class="post-actions">
+            <button class="like-btn" type="button">❤️ Curtir</button>
+            <span class="likes-count" data-count="12">12 curtidas</span>
+          </div>
+          <p class="caption">Buraco aberto no centro de Maringá! Tomara que arrumem logo isso.</p>
+          <div class="comments">
+            <div class="comment"><span class="author">João:</span> Meu Deus! </div>
+            <div class="comment"><span class="author">Carla:</span> A prefeitura deve ser acionada imediatamente.</div>
+            <div class="comment-form">
+              <input type="text" class="comment-input" placeholder="Adicionar comentário..." />
+              <button class="add-comment-btn" type="button">Comentar</button>
+            </div>
+          </div>
+        </article>
+
+        <article class="post">
+          <div class="post-header">
+            <div class="avatar">TH</div>
+            <div class="post-meta">
+              <span class="author">Thiago Henrique</span>
+              <span class="info">Maringá(Tiradentes) • ontem</span>
+            </div>
+            <span class="status-badge status-analise" title="Status">Em análise</span>
+          </div>
+          <img class="post-image" src="https://www.maringamais.com.br/wp-content/uploads/2025/10/tiradentes-640x427.jpg" alt="Alinhamento de asfalto">
+          <div class="post-actions">
+            <button class="like-btn" type="button">❤️ Curtir</button>
+            <span class="likes-count" data-count="34">34 curtidas</span>
+          </div>
+          <p class="caption">Finalmente!!! Não aguentava mais buracos na Tiradentes.</p>
+          <div class="comments">
+            <div class="comment"><span class="author">Lucas:</span> Demoraram uma eternidade, mas finalmente começaram.</div>
+            <div class="comment"><span class="author">Marta:</span> Tomara que façam em outras áreas da cidade.</div>
+            <div class="comment-form">
+              <input type="text" class="comment-input" placeholder="Adicionar comentário..." />
+              <button class="add-comment-btn" type="button">Comentar</button>
+            </div>
+          </div>
+        </article>
+
+        <article class="post">
+          <div class="post-header">
+            <div class="avatar">MJ</div>
+            <div class="post-meta">
+              <span class="author">Michael Jackson</span>
+              <span class="info">Maringá • há 3 dias</span>
+            </div>
+            <span class="status-badge status-resolvido" title="Status">Resolvido</span>
+          </div>
+          <img class="post-image" src="https://maringapost.com.br/wp-content/uploads/2025/08/centro_maringa_foto_rdziura-0961-1130x580.jpg" alt="Maringá">
+          <div class="post-actions">
+            <button class="like-btn" type="button">❤️ Curtir</button>
+            <span class="likes-count" data-count="7">7 curtidas</span>
+          </div>
+          <p class="caption">Maringá lidera infraestrutura urbana entre grandes cidades do Sul 🙌</p>
+          <div class="comments">
+            <div class="comment"><span class="author">Bianca:</span> Que orgulho de morar nessa cidade!</div>
+            <div class="comment"><span class="author">Pedro:</span> Infelizmente algumas regiões são muito perigosas ainda.</div>
+            <div class="comment-form">
+              <input type="text" class="comment-input" placeholder="Adicionar comentário..." />
+              <button class="add-comment-btn" type="button">Comentar</button>
+            </div>
+          </div>
+        </article>
+      `;
+    })();
+  </script>
+
+  <script src="../js/espaco.js"></script>
+  <script src="../js/publicacoes.js"></script>
+  <script src="../js/apoio.js"></script>
 </body>
 </html>

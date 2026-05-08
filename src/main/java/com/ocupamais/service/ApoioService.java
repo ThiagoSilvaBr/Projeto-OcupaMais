@@ -18,7 +18,12 @@ public class ApoioService {
         return apoioDAO.listar();
     }
 
-    public boolean deletar(int id) {
-        return apoioDAO.deletar(id);
+    public int contarPorPublicacao(int idPublicacao) {
+        return apoioDAO.contarPorPublicacao(idPublicacao);
+    }
+
+    // Deletar por usuario + publicacao
+    public boolean deletarPorUsuarioEPublicacao(int idUsuario, int idPublicacao) {
+        return apoioDAO.deletarPorUsuarioEPublicacao(idUsuario, idPublicacao);
     }
 }

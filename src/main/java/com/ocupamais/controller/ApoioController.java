@@ -31,7 +31,6 @@ public class ApoioController {
     public List<ApoioDTO> listarTodos() {
         return apoioService.listarTodos().stream()
                 .map(a -> new ApoioDTO(
-                        a.getId(),
                         a.getUsuario() != null ? a.getUsuario().getNome() : "N/A",
                         a.getPublicacao() != null ? a.getPublicacao().getDescricao() : "N/A"
                 ))
@@ -47,15 +46,17 @@ public class ApoioController {
         apoioService.cadastrar(apoio);
 
         return new ApoioDTO(
-                apoio.getId(),
-                usuario != null ? usuario.getNome() : "N/A",
-                publicacao != null ? publicacao.getDescricao() : "N/A"
+                usuario.getNome(),
+                publicacao.getDescricao()
         );
     }
 
-    @DeleteMapping("/{id}")
-    public String deletarApoio(@PathVariable int id) {
-        boolean removido = apoioService.deletar(id);
-        return removido ? "Apoio deletado com sucesso!" : "Apoio não encontrado.";
+    @DeleteMapping("/{idPublicacao}")
+    public String deletarApoio(
+            @PathVariable int idPublicacao,
+            @RequestParam int idUsuario) {
+
+        boolean removido = apoioService.deletarPorUsuarioEPublicacao(idUsuario, idPublicacao);
+        return removido ? "Apoio removido com sucesso!" : "Apoio não encontrado.";
     }
 }

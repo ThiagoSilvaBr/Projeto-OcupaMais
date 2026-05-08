@@ -1,11 +1,74 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-br">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Perfil</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>OcupaMais - Perfil</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="../css/perfil.css">
+  <link rel="icon" type="image/png" href="/frontend/assets/logo-arvore.png">
 </head>
+
 <body>
-    
+  <header>
+    <h1>🌳 OcupaMais</h1>
+    <nav>
+      <a href="../index.html">🏠 Início</a>
+      <a href="publicacoes.html">📝 Postagens</a>
+      <a href="perfil.html" class="active">👤 Perfil</a>
+    </nav>
+  </header>
+
+  <main class="profile-container">
+    <section class="profile-card">
+      <div class="profile-header">
+        <div class="avatar-wrap">
+          <img id="avatarImg" class="avatar" src="https://cdn-icons-png.flaticon.com/512/1077/1077063.png" alt="Foto de perfil">
+          <div>
+            <input id="avatarInput" type="file" accept="image/*" hidden>
+            <button id="changePhotoBtn" class="change-photo-btn" type="button">Alterar foto</button>
+          </div>
+        </div>
+        <div class="user-info">
+          <h2 id="userName">Usuario</h2>
+          <p id="userEmail">Usuario@example.com</p>
+          <span id="userRole" class="role-badge">USUÁRIO</span>
+
+          <div class="stats-grid">
+            <div class="stat-card">
+              <h3 id="statTotal">18</h3>
+              <span>Total de publicações</span>
+            </div>
+            <div class="stat-card">
+              <h3 id="statResolvidas">7</h3>
+              <span>Resolvidas</span>
+            </div>
+            <div class="stat-card">
+              <h3 id="statAnalise">5</h3>
+              <span>Em análise</span>
+            </div>
+            <div class="stat-card">
+              <h3 id="statPendentes">6</h3>
+              <span>Não resolvidas</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <h3 class="section-title">Sobre</h3>
+      <div class="about-card">
+        <p id="aboutText">Digite sobre você...</p>
+        <textarea id="aboutInput" class="about-textarea" style="display:none;" placeholder="Escreva algo sobre você..."></textarea>
+        <div class="about-actions">
+          <button id="editAboutBtn" type="button" class="btn-secondary-like">Editar</button>
+          <button id="saveAboutBtn" type="button" class="btn-primary-like" style="display:none;">Salvar</button>
+          <button id="cancelAboutBtn" type="button" class="btn-secondary-like" style="display:none;">Cancelar</button>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script src="../js/usuario.js"></script>
 </body>
 </html>

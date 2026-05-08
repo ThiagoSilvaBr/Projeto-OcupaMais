@@ -8,6 +8,7 @@ import com.ocupamais.model.Usuario;
 import com.ocupamais.service.PublicacaoService;
 import com.ocupamais.service.UsuarioService;
 import com.ocupamais.service.EspacoPublicoService;
+import com.ocupamais.service.ApoioService; // ✅ importar o ApoioService
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -20,70 +21,104 @@ public class PublicacaoController {
     private final PublicacaoService publicacaoService;
     private final UsuarioService usuarioService;
     private final EspacoPublicoService espacoPublicoService;
+    private final ApoioService apoioService;
 
     public PublicacaoController(PublicacaoService publicacaoService,
                                 UsuarioService usuarioService,
-                                EspacoPublicoService espacoPublicoService) {
+                                EspacoPublicoService espacoPublicoService,
+                                ApoioService apoioService) {
         this.publicacaoService = publicacaoService;
         this.usuarioService = usuarioService;
         this.espacoPublicoService = espacoPublicoService;
+        this.apoioService = apoioService;
     }
 
-    // GET: listar todas as publicações (apenas informações essenciais via DTO)
+    // GET: listar todas as publicações com contagem de apoios
     @GetMapping
     public List<PublicacaoDTO> listarTodos() {
         return publicacaoService.listarTodos().stream()
-                .map(p -> new PublicacaoDTO(
-                        p.getId(),
-                        p.getUsuario() != null ? p.getUsuario().getNome() : "N/A",
-                        p.getEspaco() != null ? p.getEspaco().getNome() : "N/A",
-                        p.getDescricao()
-                ))
-                .collect(Collectors.toList());
+            .map(p -> {
+                int totalApoios = apoioService.contarPorPublicacao(p.getId());
+                return new PublicacaoDTO(
+                    p.getId(),
+                    totalApoios,
+                    p.getUsuario().getNome(),
+                    p.getEspaco().getNome(),
+                    p.getDescricao(),
+                    p.getStatus(),
+                    p.getImagem(),
+                    p.getDataCriacao().toLocalDateTime()
+                );
+            })
+            .collect(Collectors.toList());
     }
 
     // POST: criar nova publicação
     @PostMapping
     public PublicacaoDTO criar(@RequestBody PublicacaoCreateDTO dto) {
-        // Busca objetos completos pelos IDs
         Usuario usuario = usuarioService.buscarPorId(dto.getUsuarioId());
-        EspacoPublico espaco = espacoPublicoService.buscarPorId(dto.getEspacoPublicoId());
+        if (usuario == null) {
+            throw new IllegalArgumentException("Usuário não encontrado com o ID " + dto.getUsuarioId());
+        }
 
-        // Monta a publicação
+        String nomeEspaco = dto.getNomeEspaco();
+        if (nomeEspaco == null || nomeEspaco.trim().isEmpty()) {
+            throw new IllegalArgumentException("Nome do espaço é obrigatório.");
+        }
+
+        EspacoPublico espaco = espacoPublicoService.buscarPorNome(nomeEspaco.trim());
+        if (espaco == null) {
+            espaco = new EspacoPublico();
+            espaco.setNome(nomeEspaco.trim());
+            espacoPublicoService.cadastrar(espaco);
+        }
+
+        String status = (dto.getStatus() != null && !dto.getStatus().isBlank())
+            ? dto.getStatus().toUpperCase()
+            : "PENDENTE";
+
         Publicacao publicacao = new Publicacao(usuario, espaco, dto.getDescricao());
-
-        // Salva no banco
+        publicacao.setStatus(status);
+        publicacao.setImagem(dto.getImagem());
         publicacaoService.cadastrar(publicacao);
 
-        // Retorna DTO
         return new PublicacaoDTO(
-                publicacao.getId(),
-                usuario.getNome(),
-                espaco.getNome(),
-                publicacao.getDescricao()
+            publicacao.getId(),
+            0, // totalApoios começa em 0
+            usuario.getNome(),
+            espaco.getNome(),
+            publicacao.getDescricao(),
+            publicacao.getStatus(),
+            publicacao.getImagem(),
+            publicacao.getDataCriacao().toLocalDateTime()
         );
     }
 
-    // PUT: atualizar uma publicação existente
+    // PUT: atualizar publicação existente
     @PutMapping("/{id}")
     public PublicacaoDTO atualizar(@PathVariable int id, @RequestBody PublicacaoCreateDTO dto) {
         Usuario usuario = usuarioService.buscarPorId(dto.getUsuarioId());
-        EspacoPublico espaco = espacoPublicoService.buscarPorId(dto.getEspacoPublicoId());
+        EspacoPublico espaco = espacoPublicoService.buscarPorNome(dto.getNomeEspaco());
 
         Publicacao publicacao = new Publicacao(usuario, espaco, dto.getDescricao());
         publicacao.setId(id);
+        publicacao.setStatus(dto.getStatus());
 
         publicacaoService.atualizar(publicacao);
 
         return new PublicacaoDTO(
-                publicacao.getId(),
-                usuario.getNome(),
-                espaco.getNome(),
-                publicacao.getDescricao()
+            publicacao.getId(),
+            0,
+            usuario.getNome(),
+            espaco.getNome(),
+            publicacao.getDescricao(),
+            publicacao.getStatus(),
+            publicacao.getImagem(),
+            publicacao.getDataCriacao().toLocalDateTime()
         );
     }
 
-    // DELETE: remover publicação pelo ID
+    // DELETE: remover publicação
     @DeleteMapping("/{id}")
     public String deletar(@PathVariable int id) {
         boolean removido = publicacaoService.deletar(id);
